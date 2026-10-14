@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agro Based Decision Making System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="view-landing" class="view">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">AB</div>
+        <div>
+          <h1>Agro Based Decision Making System</h1>
+          <p>Bihar investment intelligence · workforce matching</p>
+        </div>
+      </div>
+    </header>
+    <section class="hero">
+      <div class="hero-copy">
+        <h2>Decide where to invest. Hire who will run it.</h2>
+        <p>State-wise agro opportunity map (Bihar live), product clusters, official-style subsidies, BERC electricity tariffs, highways, water, and job-seekers in each district.</p>
+      </div>
+      <div class="role-grid">
+        <button class="role-card" id="go-investor">
+          <span>Portal</span>
+          <h3>Login as Investor</h3>
+          <p>Select state → product → district. See subsidies, power rates, logistics, then hire local workforce.</p>
+        </button>
+        <button class="role-card" id="go-employer">
+          <span>Jobs</span>
+          <h3>Login as Employer</h3>
+          <p>Register as a job-seeker, choose technical or non-technical work, and become visible to investors in your district.</p>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div id="view-investor-login" class="view hidden">
+    <header class="topbar">
+      <div class="brand"><div class="logo">AB</div><div><h1>Investor login</h1><p>Access district intelligence</p></div></div>
+      <button class="ghost" data-home>Home</button>
+    </header>
+    <form class="panel" id="form-investor">
+      <h2>Continue as investor</h2>
+      <p class="sub">Demo login — stored only on this device.</p>
+      <label for="inv-name">Full name</label>
+      <input id="inv-name" required placeholder="Your name" />
+      <label for="inv-org">Organisation</label>
+      <input id="inv-org" required placeholder="Firm / fund" />
+      <label for="inv-email">Email</label>
+      <input id="inv-email" type="email" required placeholder="you@company.com" />
+      <button class="btn" type="submit">Enter investor desk</button>
+    </form>
+  </div>
+
+  <div id="view-investor" class="view hidden">
+    <header class="topbar">
+      <div class="brand"><div class="logo">AB</div><div><h1>Investor desk</h1><p id="inv-hello"></p></div></div>
+      <button class="ghost" data-home>Sign out</button>
+    </header>
+    <p class="crumbs" id="inv-crumbs">Select state</p>
+    <div class="wrap" id="inv-body"></div>
+  </div>
+
+  <div id="view-employer-login" class="view hidden">
+    <header class="topbar">
+      <div class="brand"><div class="logo">AB</div><div><h1>Job-seeker login</h1><p>List yourself for hire</p></div></div>
+      <button class="ghost" data-home>Home</button>
+    </header>
+    <form class="panel" id="form-employer">
+      <h2>Your details</h2>
+      <p class="sub">After this you will choose work type (technical / non-technical).</p>
+      <label>Full name</label>
+      <input id="emp-name" required />
+      <div class="row2">
+        <div>
+          <label>Age</label>
+          <input id="emp-age" type="number" min="18" max="70" required />
+        </div>
+        <div>
+          <label>Phone</label>
+          <input id="emp-phone" required placeholder="10-digit mobile" />
+        </div>
+      </div>
+      <label>Email</label>
+      <input id="emp-email" type="email" required />
+      <label>District</label>
+      <select id="emp-district" required></select>
+      <label>Education</label>
+      <input id="emp-edu" required />
+      <label>Experience</label>
+      <input id="emp-exp" required placeholder="Years and role" />
+      <button class="btn" type="submit">Choose work type</button>
+    </form>
+  </div>
+
+  <div id="view-work-type" class="view hidden">
+    <header class="topbar">
+      <div class="brand"><div class="logo">AB</div><div><h1>Choose work type</h1><p>Industry roles in Bihar agro & allied units</p></div></div>
+      <button class="ghost" data-home>Home</button>
+    </header>
+    <div class="panel">
+      <div class="type-grid">
+        <button class="type-card" data-type="technical"><h3>Technical</h3><p>Plant, QC, electrical, agronomy, processing.</p></button>
+        <button class="type-card" data-type="non-technical"><h3>Non-technical</h3><p>Supervision, collection, logistics, packing, office.</p></button>
+      </div>
+      <div id="job-pick" class="hidden" style="margin-top:18px">
+        <label>Select role</label>
+        <select id="emp-job"></select>
+        <button class="btn" id="emp-submit">Submit profile</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-done" class="view hidden">
+    <header class="topbar">
+      <div class="brand"><div class="logo">AB</div><div><h1>Profile submitted</h1></div></div>
+      <button class="ghost" data-home>Home</button>
+    </header>
+    <div class="panel">
+      <h2>You are now visible to investors</h2>
+      <p class="sub" id="done-msg"></p>
+      <button class="btn secondary" data-home>Back to home</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

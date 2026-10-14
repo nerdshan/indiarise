@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductCategory {
+  mineral
+  agricultural
+  dairy
+}
+
+enum JobRoleType {
+  technical
+  non_technical
+}
+
+enum JobPostingStatus {
+  hiring_now
+  upcoming
+}
+
+model State {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  districts District[]
+}
+
+model District {
+  id                 Int                  @id @default(autoincrement())
+  stateId            Int                  @map("state_id")
+  name               String
+  state              State                @relation(fields: [stateId], references: [id])
+  districtProducts   DistrictProduct[]
+  districtInfo       DistrictInfo?
+  subsidies          Subsidy[]
+  companyJobPostings CompanyJobPosting[]
+  dairyUnions        DistrictDairyUnion[]
+
+  @@unique([stateId, name])
+  @@map("districts")
+}
+
+model Product {
+  id               Int               @id @default(autoincrement())
+  name             String            @unique
+  category         ProductCategory
+  districtProducts DistrictProduct[]
+  subsidies        Subsidy[]
+}
+
+model DistrictProduct {
+  id         Int      @id @default(autoincrement())
+  districtId Int      @map("district_id")
+  productId  Int      @map("product_id")
+  avgPrice   Decimal  @map("avg_price") @db.Decimal(12, 2)
+  notes      String?
+  district   District @relation(fields: [districtId], references: [id], onDelete: Cascade)
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([districtId, productId])
+  @@map("district_products")
+}
+
+model DistrictInfo {
+  id                       Int      @id @default(autoincrement())
+  districtId               Int      @unique @map("district_id")
+  avgLandCost              Decimal  @map("avg_land_cost") @db.Decimal(12, 2)
+  electricityRateIndustrial Decimal @map("electricity_rate_industrial") @db.Decimal(8, 2)
+  electricityFixedCharge   Decimal? @map("electricity_fixed_charge") @db.Decimal(8, 2)
+  electricityTariffNotes     String?  @map("electricity_tariff_notes")
+  nearestWaterSource       String   @map("nearest_water_source")
+  nearestNationalHighway   String   @map("nearest_national_highway")
+  highwayDistanceKm        Decimal? @map("highway_distance_km") @db.Decimal(8, 2)
+  district                 District @relation(fields: [districtId], references: [id], onDelete: Cascade)
+
+  @@map("district_info")
+}
+
+model Subsidy {
+  id          Int      @id @default(autoincrement())
+  districtId  Int      @map("district_id")
+  productId   Int?     @map("product_id")
+  schemeName  String   @map("scheme_name")
+  description String
+  link        String?
+  district    District @relation(fields: [districtId], references: [id], onDelete: Cascade)
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@map("subsidies")
+}
+
+model JobRole {
+  id                 Int                 @id @default(autoincrement())
+  name               String              @unique
+  type               JobRoleType
+  companyJobPostings CompanyJobPosting[]
+}
+
+model CompanyJobPosting {
+  id          Int              @id @default(autoincrement())
+  companyName String           @map("company_name")
+  districtId  Int              @map("district_id")
+  jobRoleId   Int              @map("job_role_id")
+  status      JobPostingStatus
+  contactInfo String           @map("contact_info")
+  district    District         @relation(fields: [districtId], references: [id], onDelete: Cascade)
+  jobRole     JobRole          @relation(fields: [jobRoleId], references: [id], onDelete: Cascade)
+
+  @@map("company_job_postings")
+}
+
+model DairyUnion {
+  id        Int                  @id @default(autoincrement())
+  name      String               @unique
+  districts DistrictDairyUnion[]
+}
+
+model DistrictDairyUnion {
+  districtId   Int        @map("district_id")
+  dairyUnionId Int        @map("dairy_union_id")
+  district     District   @relation(fields: [districtId], references: [id], onDelete: Cascade)
+  dairyUnion   DairyUnion @relation(fields: [dairyUnionId], references: [id], onDelete: Cascade)
+
+  @@id([districtId, dairyUnionId])
+  @@map("district_dairy_union")
+}
